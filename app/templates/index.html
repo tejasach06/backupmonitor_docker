@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>DR BAckup Report</title>
+    <link
+        rel="icon"
+        href="{{ url_for('static', filename='logo/MediaNet_square.png') }}"
+        type="image/x-icon"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="{{ 'dark-mode' if session.get('dark_mode') else '' }}">
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo/MediaNet_big.png' if not session.get('dark_mode') else 'logo/MediaNet_big_dark.png') }}" alt="Compay Logo" class="logo">
+        <h1>DR Backup Report</h1>
+    </div>
+    <p>
+        <button type="button" class="dark-mode-toggle" onclick="darkModeToggle()">
+            <span class="dark-mode-icon" aria-hidden="true">🌜</span>
+            Dark Mode
+        </button>
+    </p>
+    <form method="post" class="date-filter">
+        <label for="start_date" class="label">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}"  class="date-input">
+        <label for="end_date" class="label">End Date:</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}"  class="date-input">
+        <button type="submit" class="filter-btn">Filter</button>
+    </form>
+
+    <p></p>
+
+    <table>
+        <thead>
+            <tr>
+                {% for column in column_names %}
+                <th class="table-header">{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for value in row %}
+                <td class="table-cell">{{ value|safe }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        function darkModeToggle() {
+            const body = document.querySelector('body');
+            const darkMode = body.classList.contains('dark-mode');
+            sessionStorage.setItem('dark_mode', !darkMode);
+            if (darkMode) {
+                body.classList.remove('dark-mode');
+            } else {
+                body.classList.add('dark-mode');
+            }
+        }
+        if (sessionStorage.getItem('dark_mode') === 'true') {
+            const body = document.querySelector('body');
+            body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
+
+
